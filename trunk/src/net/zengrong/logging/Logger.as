@@ -1,4 +1,4 @@
-package net.zengrong.utils
+package net.zengrong.logging
 {
 import flash.utils.getQualifiedClassName;
 
@@ -6,14 +6,20 @@ import mx.logging.ILogger;
 import mx.logging.Log;
 import mx.logging.LogEvent;
 import mx.logging.LogEventLevel;
+import mx.logging.targets.TraceTarget;
 import mx.utils.ObjectUtil;
 public class Logger
 {
 	private static var _log:ILogger;
-	private static var _target:LCDebugTarget;
+	private static var _target:TraceTarget;
 	public static const LC_NAME:String = '_debugLocalConnection';
 	private static const LC_FUN_NAME:String = 'lcHandler';
 	private static const CAT:String = 'net.zengrong.utils.Logger';
+	
+	public static const TRACE:String = 'trace';
+	public static const FIREBUG:String = 'firebug';
+	
+	public static var TYPE:String = TRACE; 
 	
 	//--------------------------------------------------------------------------
 	//
@@ -116,11 +122,15 @@ public class Logger
 	//--------------------------------------------------------------------------
 	public static function debug(...rest):void
 	{
-		var msg:String = getTargetParam(rest[0]);
-		for(var i:uint = 1; i<rest.length; i++){
-			msg = msg.replace(new RegExp("\\{"+i+"\\}", "g"), getTargetParam(rest[i]));
-		}
-		Logger.getLogger().debug(msg);
+		switch(TYPE)
+		{
+			case TRACE:
+				Logger.getLogger().debug.apply(null, rest);
+				break;
+			case FIREBUG:
+				Firebug.debug.apply(null, rest);
+				break;			
+		}		
 	}
 	
 	//--------------------------------------------------------------------------
@@ -128,12 +138,15 @@ public class Logger
 	//--------------------------------------------------------------------------
 	public static function error(...rest):void
 	{
-		var msg:String = getTargetParam(rest[0]);
-		for(var i:uint = 1; i<rest.length; i++){
-			msg = msg.replace(new RegExp("\\{"+i+"\\}", "g"), getTargetParam(rest[i]));
-		}
-		Logger.getLogger().debug(msg);
-		//Logger.getLogger().error(getTargetParam($obj));
+		switch(TYPE)
+		{
+			case TRACE:
+				Logger.getLogger().error.apply(null, rest);
+				break;
+			case FIREBUG:
+				Firebug.error.apply(null, rest);
+				break;			
+		}	
 	}
 	
 	//--------------------------------------------------------------------------
@@ -141,12 +154,15 @@ public class Logger
 	//--------------------------------------------------------------------------
 	public static function fatal(...rest):void
 	{
-		var msg:String = getTargetParam(rest[0]);
-		for(var i:uint = 1; i<rest.length; i++){
-			msg = msg.replace(new RegExp("\\{"+i+"\\}", "g"), getTargetParam(rest[i]));
-		}
-		Logger.getLogger().debug(msg);
-		//Logger.getLogger().fatal(getTargetParam($obj));
+		switch(TYPE)
+		{
+			case TRACE:
+				Logger.getLogger().fatal.apply(null, rest);
+				break;
+			case FIREBUG:
+				Firebug.log.apply(null, rest);
+				break;			
+		}	
 	}
 	
 	//--------------------------------------------------------------------------
@@ -154,12 +170,15 @@ public class Logger
 	//--------------------------------------------------------------------------
 	public static function info(...rest):void
 	{
-		var msg:String = getTargetParam(rest[0]);
-		for(var i:uint = 1; i<rest.length; i++){
-			msg = msg.replace(new RegExp("\\{"+i+"\\}", "g"), getTargetParam(rest[i]));
-		}
-		Logger.getLogger().debug(msg);
-		//Logger.getLogger().info(getTargetParam($obj));
+		switch(TYPE)
+		{
+			case TRACE:
+				Logger.getLogger().info.apply(null, rest);
+				break;
+			case FIREBUG:
+				Firebug.info.apply(null, rest);
+				break;			
+		}	
 	}
 	
 	//--------------------------------------------------------------------------
@@ -167,21 +186,17 @@ public class Logger
 	//--------------------------------------------------------------------------
 	public static function warn(...rest):void
 	{
-		var msg:String = getTargetParam(rest[0]);
-		for(var i:uint = 1; i<rest.length; i++){
-			msg = msg.replace(new RegExp("\\{"+i+"\\}", "g"), getTargetParam(rest[i]));
-		}
-		Logger.getLogger().debug(msg);
-		//Logger.getLogger().warn(getTargetParam($obj));
+		switch(TYPE)
+		{
+			case TRACE:
+				Logger.getLogger().warn.apply(null, rest);
+				break;
+			case FIREBUG:
+				Firebug.warn.apply(null, rest);
+				break;			
+		}	
 	}
 	
-	//--------------------------------------------------------------------------
-	//  trace2()
-	//--------------------------------------------------------------------------
-	public static function trace2($str:Object):void
-	{
-		trace($str);
-	}
 	
 	//--------------------------------------------------------------------------
 	//  getLevelString()
@@ -215,11 +230,11 @@ public class Logger
 	//  getTarget()
 	//--------------------------------------------------------------------------
 	
-	private static function getTarget():LCDebugTarget
+	private static function getTarget():TraceTarget
 	{
 		if(Logger._target == null)
 		{
-			_target = new LCDebugTarget();
+			_target = new TraceTarget();
 			_target.filters = ['*'];
 			_target.level = LogEventLevel.DEBUG;
 			Log.addTarget(_target);

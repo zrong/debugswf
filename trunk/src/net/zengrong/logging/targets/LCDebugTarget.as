@@ -1,4 +1,4 @@
-package net.zengrong.utils
+package net.zengrong.logging.targets
 {
 
 import flash.events.StatusEvent;
