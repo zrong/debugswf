@@ -15,7 +15,7 @@
 			import flash.net.LocalConnection;
 			import flash.events.StatusEvent;
 			import flash.system.System;
-			import net.zengrong.utils.Logger;
+			import net.zengrong.logging.Logger;r;
 			
 			[Bindable]
 			private var msg:String = '';

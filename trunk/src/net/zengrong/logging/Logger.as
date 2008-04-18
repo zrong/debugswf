@@ -12,9 +12,12 @@ public class Logger
 {
 	private static var _log:ILogger;
 	private static var _target:TraceTarget;
+	
 	public static const LC_NAME:String = '_debugLocalConnection';
 	private static const LC_FUN_NAME:String = 'lcHandler';
 	private static const CAT:String = 'net.zengrong.utils.Logger';
+	
+	public static var FILTERS:Array = [CAT];
 	
 	public static const TRACE:String = 'trace';
 	public static const FIREBUG:String = 'firebug';
@@ -235,7 +238,7 @@ public class Logger
 		if(Logger._target == null)
 		{
 			_target = new TraceTarget();
-			_target.filters = ['*'];
+			_target.filters = FILTERS;
 			_target.level = LogEventLevel.DEBUG;
 			Log.addTarget(_target);
 		}
