@@ -15,7 +15,7 @@
 			import flash.net.LocalConnection;
 			import flash.events.StatusEvent;
 			import flash.system.System;
-			import net.zengrong.logging.Logger;r;
+			import net.zengrong.logging.Logger;
 			
 			[Bindable]
 			private var msg:String = '';
@@ -31,11 +31,11 @@
 	                lc.connect(Logger.LC_NAME);
 	            }
 	            catch(error:ArgumentError) {
-	                Logger.trace2("Can't connect...the connection name is already being used by another SWF");
+	                Logger.debug("Can't connect...the connection name is already being used by another SWF");
 	            }
 	            catch(error:TypeError)
 	            {
-	            	Logger.trace2(error);	
+	            	Logger.debug(error);	
 	            } 
 			}
 			
