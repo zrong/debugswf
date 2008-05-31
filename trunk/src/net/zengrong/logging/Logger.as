@@ -15,7 +15,7 @@ public class Logger
 	
 	public static const LC_NAME:String = '_debugLocalConnection';
 	private static const LC_FUN_NAME:String = 'lcHandler';
-	private static const CAT:String = 'net.zengrong.utils.Logger';
+	private static const CAT:String = 'net.zengrong.logging.Logger';
 	
 	public static var FILTERS:Array = [CAT];
 	
